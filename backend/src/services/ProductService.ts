@@ -55,6 +55,32 @@ const ProductService = {
         const [rows] = await db.query(sql, params);
         return rows;
     },
+
+    async getProductDetail(productId: number) {
+        const sql = `
+        SELECT
+        p.id,
+        p.name,
+        p.price,
+        p.temperature_zone,
+        p.ingredients,
+        p.allergies,
+        p.nutrition_json,
+        c.name AS category_name,
+        l.lot_no,
+        l.manufactured_at,
+        l.expire_at,
+        l.stock AS lot_stock
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        LEFT JOIN lots l ON p.id = l.product_id
+        WHERE p.id = ?
+        LIMIT 1
+        `;
+
+        const [rows]: any = await db.query(sql, [productId]);
+        return rows[0] || null;
+    }
 };
 
 export default ProductService;
