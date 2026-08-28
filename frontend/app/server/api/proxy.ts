@@ -3,7 +3,7 @@ import { defineEventHandler, readBody } from 'h3';
 
 export default defineEventHandler(async (event) => {
     const path = event.node.req.url?.replace('/api', '') || '';
-    const backendUrl = `http://localhost:3001${path}`;
+    const backendUrl = `http://localhost:3000${path}`;
 
     const response = await $fetch(backendUrl, {
         method: event.node.req.method,
