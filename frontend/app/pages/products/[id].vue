@@ -14,10 +14,11 @@
 import { useRoute } from 'vue-router';
 import { useApi } from '~/composables/useApi';
 import ProductDetail from '~/components/ProductDetail.vue';
+import { useCart } from '~/composables/useCart';    
 
 const api = useApi();
 const route = useRoute();
-
+const cart = useCart();
 const product = ref<any>(null);
 
 const fetchProduct = async () => {
@@ -28,6 +29,8 @@ const fetchProduct = async () => {
 const addToCart = (item: any) => {
     console.log('カートに追加：', item);
     // ここにカート追加の処理を実装
+    cart.addToCart(item, 1);
+    alert('カートに追加しました');
 }
 
 onMounted(fetchProduct);
