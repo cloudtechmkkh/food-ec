@@ -1,7 +1,7 @@
-import { $fetch } from 'ofetch';
-
 export const useApi = () => {
-    const get = (url: string) => $fetch(`/api${url}`);
+    const get = <T>(url: string, params: Record<string, unknown> = {}) => {
+        return $fetch<T>(`${url}`, { params });
+    };
     const post = (url: string, body: any) => $fetch(`/api${url}`, { method: 'POST', body });
     return { get, post };
 }
