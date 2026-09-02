@@ -1,5 +1,7 @@
+import fs from 'fs';
 import { db } from '../utils/db';
 import Stripe from 'stripe';
+import { createDeliveryLabelCsv } from '../utils/delivery';
 
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
     // @ts-ignore
@@ -94,12 +96,70 @@ const OrderService = {
                 );
             }
 
+            // 注文情報を取得 (配送ラベル用)
+            const [orderRows]: any = await conn.query(
+                `
+                SELECT o.id, o.user_id, o.address_id, o.created_at
+                FROM orders o
+                WHERE o.id = ?
+                `,
+                [orderId]
+            );
+
+            const order = orderRows[0];
+
+            // ユーザー情報
+            const [userRows]: any = await conn.query(
+                `
+                SELECT name FROM users WHERE id = ?
+                `,
+                [userId]
+            );
+            order.user = userRows[0];
+
+            // 住所情報
+            const [addressRows]: any = await conn.query(
+                `
+                SELECT postal_code, prefecture, city, address_line, phone
+                FROM addresses WHERE id = ?
+                `,
+                [order.address_id]
+            );
+            order.address = addressRows[0];
+
+            // 商品情報
+            const [itemRows]: any = await conn.query(
+                `
+                SELECT oi.quantity, p.name, p.temperature_zone
+                FROM order_items oi
+                JOIN produts p ON oi.prodcut_id = p.id
+                WHERE oi.order_id = ?
+                `,
+                [orderId]
+            );
+            order.items = itemRows;
+
+            // 配送日 (例：翌日)
+            order.delivery_date = new Date(Date.now() + 86400000)
+                .toISOString()
+                .split('T')[0];
+
+            // CSV生成
+            const csv = createDeliveryLabelCsv(order);
+
+            // 保存 (任意)
+            await fs.promises.writeFile(
+                `./delivery_labels/order_${orderId}.csv`,
+                csv
+            );
+
             await conn.commit();
             
             return {
                 orderId,
                 totalPrice,
-                status: 'confirmed'
+                status: 'confirmed',
+                deliveryLabelPath: `./delivery_labels/order_${orderId}.csv`
             };
         } catch (err) {
             await conn.rollback();
