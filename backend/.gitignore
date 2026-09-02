@@ -11,3 +11,5 @@ yarn-error.log*
 *.tsbuildinfo
 .vscode/
 .DS_Store
+rsa.ts
+keys/
