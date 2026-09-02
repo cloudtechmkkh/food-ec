@@ -11,6 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/delivery_labels', express.static('delivery_labels'));
 
 // Routes
 app.use('/api/products', productsRoutes);
