@@ -132,7 +132,7 @@ const OrderService = {
                 `
                 SELECT oi.quantity, p.name, p.temperature_zone
                 FROM order_items oi
-                JOIN produts p ON oi.prodcut_id = p.id
+                JOIN products p ON oi.product_id = p.id
                 WHERE oi.order_id = ?
                 `,
                 [orderId]
