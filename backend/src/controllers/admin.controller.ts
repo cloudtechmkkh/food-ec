@@ -36,3 +36,14 @@ export const getAdminProducts = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+export const updateAdminProduct = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const updated = await AdminService.updateProduct(id, req.body);
+        res.json(updated);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Update failed' });
+    }
+}

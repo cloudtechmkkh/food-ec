@@ -84,6 +84,33 @@ const AdminService = {
         );
 
         return rows;
+    },
+
+    async updateProduct(id: number, body: any) {
+        const { name, price, temperature_zone, category_id, ingredients, allergies } = body;
+
+        await db.query(
+            `
+            UPDATE products SET
+                    name = ?,
+                    price = ?,
+                    temperature_zone = ?,
+                    category_id = ?,
+                    ingredients = ?,
+                    allergies = ?
+            WHERE id = ?
+            `,
+            [name, price, temperature_zone, category_id, ingredients, allergies, id]
+        );
+
+        const [rows]: any = await db.query(
+            `
+            SELECT * FROM products WHERE id = ?
+            `,
+            [id]
+        );
+
+        return rows[0];
     }
 };
 

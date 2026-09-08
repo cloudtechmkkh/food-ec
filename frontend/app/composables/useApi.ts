@@ -3,5 +3,6 @@ export const useApi = () => {
         return $fetch<T>(`${url}`, { params });
     };
     const post = (url: string, body: any) => $fetch(`${url}`, { method: 'POST', body });
-    return { get, post };
+    const put = (url: string, body: any) => $fetch(`${url}`, { method: 'PUT', body });
+    return { get, post, put };
 }
