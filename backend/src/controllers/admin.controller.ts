@@ -26,3 +26,13 @@ export const getAdminOrderDetail = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+export const getAdminProducts = async (req: Request, res: Response) => {
+    try {
+        const products = await AdminService.getProducts();
+        res.json(products);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+}

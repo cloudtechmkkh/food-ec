@@ -65,6 +65,25 @@ const AdminService = {
         order.items = items;
 
         return order;
+    },
+
+    async getProducts() {
+        const [rows] = await db.query(
+            `
+            SELECT
+                p.id,
+                p.name,
+                p.price,
+                p.temperature_zone,
+                c.name AS category_name,
+                p.created_at
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            ORDER BY p.created_at DESC
+            `
+        );
+
+        return rows;
     }
 };
 

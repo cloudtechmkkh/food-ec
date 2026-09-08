@@ -3,7 +3,7 @@ import { db } from '../utils/db';
 import Stripe from 'stripe';
 import { createDeliveryLabelCsv } from '../utils/delivery';
 
-const stripe = new Stripe(process.env.STRIPE_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     // @ts-ignore
     apiVersion: '2023-10-16'
 });
