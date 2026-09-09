@@ -47,3 +47,13 @@ export const updateAdminProduct = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Update failed' });
     }
 }
+
+export const createAdminProduct = async (req: Request, res: Response) => {
+    try {
+        const created = await AdminService.createProduct(req.body);
+        res.json(created);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Create failed' });
+    }
+}

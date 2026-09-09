@@ -111,6 +111,37 @@ const AdminService = {
         );
 
         return rows[0];
+    },
+
+    async createProduct(body: any) {
+        const {
+            name,
+            price,
+            temperature_zone,
+            category_id,
+            ingredients,
+            allergies
+        } = body;
+
+        const [result]: any = await db.query(
+            `
+            INSERT INTO products
+            (name, price, temperature_zone, category_id, ingredients, allergies)
+            VALUES (?, ?, ?, ?, ?, ?)
+            `,
+            [name, price, temperature_zone, category_id, ingredients, allergies]
+        );
+
+        const newId = result.insertId;
+
+        const [rows]: any = await db.query(
+            `
+            SELECT * FROM products WHERE id = ?
+            `,
+            [newId]
+        );
+
+        return rows[0];
     }
 };
 
