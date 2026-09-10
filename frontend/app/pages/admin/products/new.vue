@@ -25,7 +25,7 @@ const form = reactive({
 });
 
 const save = async (data: any) => {
-    await api.post('api/admin/products', data);
+    await api.post('/api/admin/products', data);
     alert('商品を追加しました');
     navigateTo('/admin/products');
 }

@@ -18,6 +18,6 @@ const order = ref<any>(null);
 
 onMounted(async () => {
     const id = route.params.id;
-    order.value = await api.get(`/admin/orders/${id}`);
+    order.value = await api.get(`/api/admin/orders/${id}`);
 })
 </script>
