@@ -1,5 +1,13 @@
 import { Router } from 'express';
-import { getAdminOrders, getAdminOrderDetail, getAdminProducts, updateAdminProduct, createAdminProduct } from '../controllers/admin.controller';
+import {    getAdminOrders, 
+            getAdminOrderDetail, 
+            getAdminProducts, 
+            updateAdminProduct, 
+            createAdminProduct, 
+            getProductLots, 
+            createLot,
+            updateLot
+        } from '../controllers/admin.controller';
 import adminAuth from '../middlewares/adminAuth';
 
 const router = Router();
@@ -9,5 +17,8 @@ router.get('/orders/:id', adminAuth, getAdminOrderDetail);
 router.get('/products', adminAuth, getAdminProducts);
 router.put('/products/:id', adminAuth, updateAdminProduct);
 router.post('/products', adminAuth, createAdminProduct);
+router.get('/products/:id/lots', adminAuth, getProductLots);
+router.post('/products/:id/lots', adminAuth, createLot);
+router.put('/lots/:lotId', adminAuth, updateLot);
 
 export default router;

@@ -57,3 +57,36 @@ export const createAdminProduct = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Create failed' });
     }
 }
+
+export const getProductLots = async (req: Request, res: Response) => {
+    try {
+        const productId = Number(req.params.id);
+        const lots = await AdminService.getProductLots(productId);
+        res.json(lots);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+export const createLot = async (req: Request, res: Response) => {
+    try {
+        const productId = Number(req.params.id);
+        const lot = await AdminService.createLot(productId, req.body);
+        res.json(lot);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Create lot failed' });
+    };
+}
+
+export const updateLot = async (req: Request, res: Response) => {
+    try {
+        const lotId = Number(req.params.lotId);
+        const updated = await AdminService.updateLot(lotId, req.body);
+        res.json(updated);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Update lot failed' });
+    };
+}

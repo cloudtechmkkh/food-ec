@@ -142,6 +142,69 @@ const AdminService = {
         );
 
         return rows[0];
+    },
+
+    async getProductLots(productId: number) {
+        const [rows] = await db.query(
+            `
+            SELECT
+                id,
+                lot_no,
+                manufactured_at,
+                expire_at,
+                stock
+            FROM lots
+            WHERE product_id = ?
+            `,
+            [productId]
+        );
+        return rows;
+    },
+
+    async createLot(productId: number, body: any) {
+        const { lot_no, manufactured_at, expire_at, stock } = body;
+
+        const [result]: any = await db.query(
+            `
+            INSERT INTO lots (product_id, lot_no, manufactured_at, expire_at, stock)
+            VALUES (?, ?, ?, ?, ?)
+            `,
+            [productId, lot_no, manufactured_at, expire_at, stock]
+        );
+
+        const [rows]: any = await db.query(
+            `
+            SELECT * FROM lots WHERE id = ?
+            `,
+            [result.insertId]
+        );
+
+        return rows[0];
+    },
+
+    async updateLot(lotId: number, body: any) {
+        const { lot_no, manufactured_at, expire_at, stock } = body;
+
+        await db.query(
+            `
+            UPDATE lots
+            SET lot_no = ?, 
+            manufactured_at = ?, 
+            expire_at = ?, 
+            stock = ?
+            WHERE id = ?
+            `,
+            [lot_no, manufactured_at, expire_at, stock, lotId]
+        );
+
+        const [rows]: any = await db.query(
+            `
+            SELECT * FROM lots WHERE id = ?
+            `,
+            [lotId]
+        );
+        
+        return rows[0];
     }
 };
 
