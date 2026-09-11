@@ -1,3 +1,5 @@
+import { jwtDecode } from 'jwt-decode';
+
 export const useAuth = () => {
     const token = useState<string | null>('token', () => {
         if (import.meta.client) {
@@ -5,6 +7,17 @@ export const useAuth = () => {
         }
         return null;
     });
+
+    const user = useState<any>('user', () => null);
+
+    const setUserFromToken = (jwt: string) => {
+        const decoded: any = jwtDecode(jwt);
+        user.value = {
+            id: decoded.id,
+            email: decoded.email,
+            role: decoded.role, //★ここが重要
+        };
+    };
 
     const login = async (email: string, password: string) => {
         const res: any = await $fetch('/api/auth/login', {
@@ -15,18 +28,16 @@ export const useAuth = () => {
         if (!res.token) throw new Error('Token not found');
 
         token.value = res.token;
+        localStorage.setItem('token', res.token);
 
-        if (import.meta.client) {
-            localStorage.setItem('token', res.token);
-        }
+        setUserFromToken(res.token);
     };
 
     const logout = () => {
         token.value = null;
-        if (import.meta.client) {
-            localStorage.removeItem('token');
-        }
+        user.value = null;
+        localStorage.removeItem('token');
     };
 
-    return { token, login, logout };
+    return { token, user, login, logout };
 };
