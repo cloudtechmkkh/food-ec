@@ -68,7 +68,7 @@ const submitOrder = async () => {
         return;
     }
 
-    const res = await api.post('api/orders', {
+    const res = await api.post('/api/orders', {
         items: cart,
         addressId: addressId.value,
         paymentMethodId: paymentMethodId.value,

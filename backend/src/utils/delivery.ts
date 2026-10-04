@@ -1,9 +1,20 @@
 export const createDeliveryLabelCsv = (order: any) => {
-    return [
-        order.id,
-        order.user.name,
-        order.user.address,
-        order.temperatureZone,
-        order.items.map((i: any) => `${i.name}*${i.quantity}`).join(', '),
-    ].join(',');
+    const rows = [];
+
+    for(const item of order.items) {
+        rows.push([
+            order.id,
+            order.user.name,
+            order.address.postal_code,
+            order.address.prefecture,
+            order.address.city,
+            order.address.address_line,
+            order.address.phone,
+            item.temperature_zone,
+            `${item.name}*${item.quantity}`,
+            order.delivery_date
+        ].join(','));
+    }
+
+    return rows.join('\n');
 }
